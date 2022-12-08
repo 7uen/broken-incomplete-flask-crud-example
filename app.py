@@ -44,6 +44,28 @@ def read(): # Name of the method
     mimetype='application/json'
   )
   return ret #Return the data in a string format
+
+@app.route("/delete")
+def delete():
+  name = request.args.get('name')
+  cur = mysql.connection.cursor()
+  str = f"DELETE from students where studentName = '{name}'"
+  print(str)
+  cur.execute(str)
+  mysql.connection.commit()
+  print("worked")
+  return "<h1>Deleted user</h1>"
+
+@app.route("/update")
+def update():
+  name = request.args.get('name')
+  email = request.args.get('email')
+  cur = mysql.connection.cursor()
+  cur.execute(
+      f"UPDATE students set email = '{email}' where studentName = '{name}'")
+  mysql.connection.commit()
+  return "<h1>Updated user</h1>"
+
 if __name__ == "__main__":
   app.run(host='0.0.0.0',port='8080') #Run the flask app at port 8080
 
